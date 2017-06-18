@@ -29,7 +29,15 @@ public class DataIngest {
             case "SITE_VISIT":
                 insertSiteVisit(jsonObject, dataStore);
                 break;
-
+            case "IMAGE":
+                insertImage(jsonObject, dataStore);
+                break;
+            case "ORDER":
+                insertOrder(jsonObject, dataStore);
+                break;
+            default:
+                System.out.println("UnKnown data");
+                break;       
         }
     }
 
@@ -63,15 +71,14 @@ public class DataIngest {
     }
 
     public void insertSiteVisit(JsonObject jsonObject, DataStore dataStore) {
-        
+
         String verb = jsonObject.get("verb").getAsString();
         String key = jsonObject.get("key").getAsString();
         String eventTime = jsonObject.get("event_time").getAsString();
         String customerID = jsonObject.get("customer_id").getAsString();
-        
-        HashMap<String,String> tags = null;
-        
-        
+
+        HashMap<String, String> tags = null;
+
         //To-do tags
 //        JsonArray jsonArray = jsonObject.get("tags").getAsJsonArray();
 //
@@ -90,35 +97,43 @@ public class DataIngest {
         Instant instant = Instant.parse(eventTime);
 
         LocalDateTime currEventTime = LocalDateTime.ofInstant(instant, ZoneId.of(ZoneOffset.UTC.getId()));
-        
+
         HashMap<String, ArrayList<SiteVisit>> custSiteVistMap = dataStore.getCustSiteVisitMap();
-        
-        if(custSiteVistMap.get(key)!=null)        
-             custSiteVistMap.get(key).add(new SiteVisit(key,customerID,tags,currEventTime));
-        else
-        {
+
+        if (custSiteVistMap.get(key) != null) {
+            custSiteVistMap.get(key).add(new SiteVisit(key, customerID, tags, currEventTime));
+        } else {
             ArrayList<SiteVisit> listVisits = new ArrayList<>();
-            listVisits.add(new SiteVisit(key,customerID,tags,currEventTime));
-            custSiteVistMap.put(key,listVisits);
+            listVisits.add(new SiteVisit(key, customerID, tags, currEventTime));
+            custSiteVistMap.put(key, listVisits);
         }
     }
 
-    
-    public void insertImage(JsonObject jsonObject,DataStore dataStore)
-    {
+    public void insertImage(JsonObject jsonObject, DataStore dataStore) {
         String verb = jsonObject.get("verb").getAsString();
         String key = jsonObject.get("key").getAsString();
         String eventTime = jsonObject.get("event_time").getAsString();
         String customerID = jsonObject.get("customer_id").getAsString();
-        
-        
-        
-        
-        
+        String cameraMake = jsonObject.get("camera_make").getAsString();
+        String cameraModel = jsonObject.get("camera_model").getAsString();
+
+        Instant instant = Instant.parse(eventTime);
+
+        LocalDateTime currEventTime = LocalDateTime.ofInstant(instant, ZoneId.of(ZoneOffset.UTC.getId()));
+
+        HashMap<String, ArrayList<Image>> custImageMap = dataStore.getCustImageMap();
+        if (custImageMap.get(customerID) != null) {
+            custImageMap.get(customerID).add(new Image(key, customerID, cameraMake, cameraModel, currEventTime));
+        } else {
+            ArrayList<Image> listImages = new ArrayList<>();
+            listImages.add(new Image(key, customerID, cameraMake, cameraModel, currEventTime));
+            custImageMap.put(key, listImages);
+        }
+
     }
-    public void insertOrder(JsonObject jsonObject, DataStore dataStore)
-    {
-        
+
+    public void insertOrder(JsonObject jsonObject, DataStore dataStore) {
+
     }
-    
+
 }
