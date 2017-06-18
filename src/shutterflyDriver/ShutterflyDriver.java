@@ -54,8 +54,23 @@ public class ShutterflyDriver {
                 dataIngest.ingest(document,dataStore);
             }
             
-            //Checking values
+            //Checking values customers
             for(Map.Entry set:dataStore.getCustMap().entrySet())
+            {
+                System.out.println(set.getKey());
+                System.out.println(set.getValue());
+                
+            }
+            
+            // cheaking Image data
+            for(Map.Entry set:dataStore.getCustImageMap().entrySet())
+            {
+                System.out.println(set.getKey());
+                System.out.println(set.getValue());
+                
+            }
+            
+            for(Map.Entry set:dataStore.getCustSiteVisitMap().entrySet())
             {
                 System.out.println(set.getKey());
                 System.out.println(set.getValue());
