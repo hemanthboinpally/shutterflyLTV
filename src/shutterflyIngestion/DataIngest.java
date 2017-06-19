@@ -146,7 +146,7 @@ public class DataIngest {
         dataStore.checkDataStoreIngestDates(currEventTime);
         // To-do Currency
         
-        
+          System.out.println(key);
           HashMap<String, HashMap<String,Order>> custOrderMap = dataStore.getCustOrderMap();
           HashMap<String,BigDecimal> totalOrderAmtMap = dataStore.getTotalOrderAmtMap();
           
@@ -154,7 +154,7 @@ public class DataIngest {
             Order order = custOrderMap.get(customerID).get(key);
             if(order ==null)
             {
-                custOrderMap.get(customerID).put(key, order);
+                custOrderMap.get(customerID).put(key, new Order(key,customerID, amount, currEventTime));
                 //Track order amount per customer
                 totalOrderAmtMap.get(customerID).add(amount);
                 
