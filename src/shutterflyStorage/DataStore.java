@@ -5,6 +5,9 @@
  */
 package shutterflyStorage;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.*;
 
@@ -22,6 +25,12 @@ public class DataStore {
     private HashMap<String,ArrayList<SiteVisit>> custSiteVisitMap;
     private HashMap<String,HashMap<String,Order>> custOrderMap;
     private HashMap<String,ArrayList<Image>> custImageMap;
+    private HashMap<String,BigDecimal> totalOrderAmtMap;
+    private LocalDateTime startIngestDateTime;
+    private LocalDateTime endIngestDateTime;
+    
+    //Company StartDate September 1, 1999
+    
     
     public DataStore()
     {
@@ -29,8 +38,9 @@ public class DataStore {
         custSiteVisitMap = new HashMap<>();
         custOrderMap = new HashMap<>();
         custImageMap = new HashMap<>();
-        
-        
+        totalOrderAmtMap = new HashMap<>();
+        startIngestDateTime = LocalDateTime.of(3100, Month.SEPTEMBER, 29, 19, 30, 40);
+        endIngestDateTime = LocalDateTime.of(1998, Month.SEPTEMBER, 29, 19, 30, 40);
     }
 
     public HashMap<String, Customer> getCustMap() {
@@ -47,6 +57,39 @@ public class DataStore {
 
     public HashMap<String, ArrayList<Image>> getCustImageMap() {
         return custImageMap;
+    }
+
+    public HashMap<String, BigDecimal> getTotalOrderAmtMap() {
+        return totalOrderAmtMap;
+    }
+
+    public LocalDateTime getStartIngestDateTime() {
+        return startIngestDateTime;
+    }
+
+    public void setStartIngestDateTime(LocalDateTime startIngestDateTime) {
+        this.startIngestDateTime = startIngestDateTime;
+    }
+
+    public LocalDateTime getEndIngestDateTime() {
+        return endIngestDateTime;
+    }
+
+    public void setEndIngestDateTime(LocalDateTime endIngestDateTime) {
+        this.endIngestDateTime = endIngestDateTime;
+    }
+    
+     public void checkDataStoreIngestDates(LocalDateTime currDateTime)
+    {
+        if(currDateTime.isBefore(startIngestDateTime))
+        {
+            startIngestDateTime = currDateTime;
+        }
+        
+        if(currDateTime.isAfter(endIngestDateTime))
+        {
+            endIngestDateTime=currDateTime;
+        }
     }
 
     
