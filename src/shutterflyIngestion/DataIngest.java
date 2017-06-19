@@ -6,6 +6,7 @@
 package shutterflyIngestion;
 
 import com.google.gson.*;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import shutterflyStorage.*;
 import java.time.*;
@@ -50,9 +51,7 @@ public class DataIngest {
         String state = jsonObject.get("adr_state").getAsString();
 
         // Parese String to LocalDateTime using Instant
-        Instant instant = Instant.parse(eventTime);
-
-        LocalDateTime currEventTime = LocalDateTime.ofInstant(instant, ZoneId.of(ZoneOffset.UTC.getId()));
+        LocalDateTime currEventTime = getDateTime(eventTime);
 
         HashMap<String, Customer> custMap = dataStore.getCustMap();
 
@@ -93,10 +92,8 @@ public class DataIngest {
 //            }
 //
 //        }
-        // Parese String to LocalDateTime using Instant
-        Instant instant = Instant.parse(eventTime);
-
-        LocalDateTime currEventTime = LocalDateTime.ofInstant(instant, ZoneId.of(ZoneOffset.UTC.getId()));
+        // Parse String to LocalDateTime using Instant
+        LocalDateTime currEventTime = getDateTime(eventTime);
 
         HashMap<String, ArrayList<SiteVisit>> custSiteVistMap = dataStore.getCustSiteVisitMap();
 
@@ -117,9 +114,7 @@ public class DataIngest {
         String cameraMake = jsonObject.get("camera_make").getAsString();
         String cameraModel = jsonObject.get("camera_model").getAsString();
 
-        Instant instant = Instant.parse(eventTime);
-
-        LocalDateTime currEventTime = LocalDateTime.ofInstant(instant, ZoneId.of(ZoneOffset.UTC.getId()));
+        LocalDateTime currEventTime = getDateTime(eventTime);
 
         HashMap<String, ArrayList<Image>> custImageMap = dataStore.getCustImageMap();
         if (custImageMap.get(customerID) != null) {
@@ -134,6 +129,48 @@ public class DataIngest {
 
     public void insertOrder(JsonObject jsonObject, DataStore dataStore) {
 
+        String verb = jsonObject.get("verb").getAsString();
+        String key = jsonObject.get("key").getAsString();
+        String eventTime = jsonObject.get("event_time").getAsString();
+        String customerID = jsonObject.get("customer_id").getAsString();
+        String amountWithCode = jsonObject.get("total_amount").getAsString();
+        BigDecimal amount = new BigDecimal(amountWithCode.split(" ")[0]);
+        
+        
+        LocalDateTime currEventTime = getDateTime(eventTime);
+        // To-do Currency
+        
+        
+          HashMap<String, HashMap<String,Order>> custOrderMap = dataStore.getCustOrderMap();
+        if (custOrderMap.get(customerID) != null) {
+            Order order = custOrderMap.get(customerID).get(key);
+            if(order ==null)
+            {
+                custOrderMap.get(customerID).put(key, order);
+            }
+            else if(currEventTime.isAfter(order.getEventTime()))
+            {
+                custOrderMap.get(customerID).put(key,new Order(key,customerID, amount, currEventTime) );
+            }
+            
+            
+        } else {
+            HashMap<String,Order> orderMap = new HashMap<>();
+            orderMap.put(key,new Order(key,customerID, amount, currEventTime) );
+            custOrderMap.put(customerID,orderMap);
+        }
+
+        
+    }
+    
+    
+    public LocalDateTime getDateTime(String eventTime)
+    {
+        Instant instant = Instant.parse(eventTime);
+
+        LocalDateTime currEventTime = LocalDateTime.ofInstant(instant, ZoneId.of(ZoneOffset.UTC.getId()));
+        
+        return currEventTime;
     }
 
 }
