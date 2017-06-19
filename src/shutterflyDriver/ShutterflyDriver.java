@@ -70,9 +70,19 @@ public class ShutterflyDriver {
                 
             }
             
+            //checking customers
             for(Map.Entry set:dataStore.getCustSiteVisitMap().entrySet())
             {
                 System.out.println(set.getKey());
+                System.out.println(set.getValue());
+                
+            }
+            
+            //checking Orders
+            for(Map.Entry set:dataStore.getCustOrderMap().entrySet())
+            {
+                System.out.println(set.getKey());
+
                 System.out.println(set.getValue());
                 
             }
