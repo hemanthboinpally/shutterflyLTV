@@ -20,7 +20,7 @@ public class DataStore {
     
     private HashMap<String,Customer> custMap;
     private HashMap<String,ArrayList<SiteVisit>> custSiteVisitMap;
-    private HashMap<String,ArrayList<Order>> custOrderMap;
+    private HashMap<String,HashMap<String,Order>> custOrderMap;
     private HashMap<String,ArrayList<Image>> custImageMap;
     
     public DataStore()
@@ -41,7 +41,7 @@ public class DataStore {
         return custSiteVisitMap;
     }
 
-    public HashMap<String, ArrayList<Order>> getCustOrderMap() {
+    public HashMap<String, HashMap<String,Order>> getCustOrderMap() {
         return custOrderMap;
     }
 
