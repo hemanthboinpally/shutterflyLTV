@@ -1,8 +1,8 @@
-shutterflyLTV - SimpleLTV Calculation
+<b>shutterflyLTV - SimpleLTV Calculation</b>
 
 The only external JAR -gson,  is used for parsing the JSON data as per the requirement.
 
-Assumptions: 
+<b>Assumptions: </b>
 
 •	The time format provided would be coordinated universal time (UTC), as provided ealier in the sample input file. This gives us capability to display the time zone according to the requirement of the business.
 
