@@ -36,7 +36,7 @@ public class ShutterflyDriver {
         String line = null;
 
         try {
-            FileReader fileReader = new FileReader("./input/input.txt");
+            FileReader fileReader = new FileReader("./input/test_input.txt");
             BufferedReader bufferedReader = new BufferedReader(fileReader);
             StringBuilder sb = new StringBuilder();
 
@@ -47,61 +47,34 @@ public class ShutterflyDriver {
             }
 
             bufferedReader.close();
-
+            
             String events = sb.toString();
-
+            
             JsonArray jsonArray = (JsonArray) (new JsonParser().parse(events));
-
+            
             for (JsonElement document : jsonArray) {
                 dataIngest.ingest(document, dataStore);
             }
 
-//            //Checking values customers
-//            for(Map.Entry set:dataStore.getCustMap().entrySet())
-//            {
-//                System.out.println(set.getKey());
-//                System.out.println(set.getValue());
-//                
-//            }
-//            
-//            // cheaking Image data
-//            for(Map.Entry set:dataStore.getCustImageMap().entrySet())
-//            {
-//                System.out.println(set.getKey());
-//                System.out.println(set.getValue());
-//                
-//            }
-//            
-//            //checking customers
-//            for(Map.Entry set:dataStore.getCustSiteVisitMap().entrySet())
-//            {
-//                System.out.println(set.getKey());
-//                System.out.println(set.getValue());
-//                
-//            }
-//            
-//            //checking Orders
-//            for(Map.Entry set:dataStore.getCustOrderMap().entrySet())
-//            {
-//                System.out.println(set.getKey());
-//
-//                System.out.println(set.getValue());
-//                
-//            }
-          //  System.out.println("----------Data Store values ------------");
+            // write the customerID and LTV in the file
             BufferedWriter bufferWriter = new BufferedWriter(new FileWriter("./output/output.txt"));
+            
             SimpleLTVCalculator ltvCalculate = new SimpleLTVCalculator();
-            bufferWriter.write("CustomerID            LTV\n");
-            for (LTVNode custltv : ltvCalculate.topXSimpleLTVCustomers(2, dataStore)) {
-                //System.out.println(custltv.getCustomerID() + "  --  " + custltv.getLtv());
-                bufferWriter.write(custltv.getCustomerID() + "    " + custltv.getLtv()+"\n");
+            String format = "%-20s %-20s%n";
+            bufferWriter.write(String.format(format, "CustomerID","LTV"));
+            
+            for (LTVNode custltv : ltvCalculate.topXSimpleLTVCustomers(7, dataStore)) {
+
+                bufferWriter.write(String.format(format, custltv.getCustomerID(),custltv.getLtv()));
             }
             bufferWriter.close();
 
         } catch (FileNotFoundException ex) {
-            System.out.println(ex.toString());
+            ex.printStackTrace();
         } catch (IOException ex) {
-            System.out.println(ex.toString());
+            ex.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
 
     }
