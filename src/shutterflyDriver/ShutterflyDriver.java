@@ -90,7 +90,7 @@ public class ShutterflyDriver {
 //            }
           //  System.out.println("----------Data Store values ------------");
             BufferedWriter bufferWriter = new BufferedWriter(new FileWriter("./output/output.txt"));
-            SimpleLTV ltvCalculate = new SimpleLTV();
+            SimpleLTVCalculator ltvCalculate = new SimpleLTVCalculator();
             bufferWriter.write("CustomerID            LTV\n");
             for (LTVNode custltv : ltvCalculate.topXSimpleLTVCustomers(2, dataStore)) {
                 //System.out.println(custltv.getCustomerID() + "  --  " + custltv.getLtv());

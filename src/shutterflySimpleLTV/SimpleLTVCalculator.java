@@ -21,7 +21,7 @@ import shutterflyStorage.*;
  */
 
 
-public class SimpleLTV {
+public class SimpleLTVCalculator {
     
     public List<LTVNode> topXSimpleLTVCustomers(int x,DataStore dataStore)
     {

@@ -15,11 +15,12 @@ import java.util.Objects;
  */
 public class Order {
     
-    private String orderID;
     private String customerID;
     private double totalAmount;
     private LocalDateTime  lastUpdateEventTime;
 
+    
+    private String orderID;
     public Order() {
     }
 

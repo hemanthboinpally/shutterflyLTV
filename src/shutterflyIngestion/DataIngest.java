@@ -147,7 +147,7 @@ public class DataIngest {
         
         // To-do Currency
         
-          System.out.println(key);
+          //System.out.println(key);
           HashMap<String, HashMap<String,Order>> custOrderMap = dataStore.getCustOrderMap();
           HashMap<String,Double> totalOrderAmtMap = dataStore.getTotalOrderAmtMap();
           
