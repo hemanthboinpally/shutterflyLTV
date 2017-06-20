@@ -28,7 +28,7 @@ public class SimpleLTV {
         int timePeriod = 10;
         ArrayList<LTVNode> custLTVList= new ArrayList<>();
         long numberOfWeeks = ChronoUnit.WEEKS.between(dataStore.getStartIngestDateTime(), dataStore.getEndIngestDateTime());
- 
+        int noOfCustomers = 0;
         
         for(String customerID:dataStore.getCustMap().keySet())
         {
@@ -38,7 +38,7 @@ public class SimpleLTV {
             double avg = custExpendPerVisit * visitsPerWeek;
             double simpleLTV = 52* avg *timePeriod; 
             custLTVList.add(new LTVNode(customerID, simpleLTV));
-            
+            noOfCustomers++;
         }
         
         Collections.sort(custLTVList, new Comparator<LTVNode>(){
@@ -50,7 +50,13 @@ public class SimpleLTV {
         });
         
         
-        return custLTVList.subList(0, x);
+        // Handling fuzzy input
+        if(x>noOfCustomers||x<0)
+        {
+            x=noOfCustomers;
+        }
+        
+        return custLTVList.subList(0,x);
     }
     
     
