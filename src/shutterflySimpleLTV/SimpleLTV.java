@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.TreeMap;
 import shutterflyStorage.*;
 
@@ -22,7 +23,7 @@ import shutterflyStorage.*;
 
 public class SimpleLTV {
     
-    public ArrayList<LTVNode> topXSimpleLTVCustomers(int x,DataStore dataStore)
+    public List<LTVNode> topXSimpleLTVCustomers(int x,DataStore dataStore)
     {
         int timePeriod = 10;
         ArrayList<LTVNode> custLTVList= new ArrayList<>();
@@ -43,21 +44,13 @@ public class SimpleLTV {
         Collections.sort(custLTVList, new Comparator<LTVNode>(){
             @Override
             public int compare(LTVNode t1, LTVNode t2) {
-               double diff = t2.ltv-t1.ltv; 
-                if(diff>0)
-                {
-                    return 1;
-                }
-                else if(diff<0)
-                {
-                    return 0;
-                }
-                return -1;
-            }
+            return Double.compare(t2.getLtv(), t1.getLtv());
+
+           }
         });
         
         
-        return custLTVList;
+        return custLTVList.subList(0, x);
     }
     
     
