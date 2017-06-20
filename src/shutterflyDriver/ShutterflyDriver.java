@@ -19,6 +19,7 @@ import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import shutterflySimpleLTV.*;
 
@@ -70,19 +71,20 @@ public class ShutterflyDriver {
             SimpleLTVCalculator ltvCalculate = new SimpleLTVCalculator();
             String format = "%-20s %-20s%n";
             bufferWriter.write(String.format(format, "CustomerID", "LTV"));
-
-            for (LTVNode custltv : ltvCalculate.topXSimpleLTVCustomers(7, dataStore)) {
+            
+            // Simple LTV calculation
+            List<LTVNode> custLTVList = ltvCalculate.topXSimpleLTVCustomers(5, dataStore);
+            
+            for (LTVNode custltv : custLTVList) {
 
                 bufferWriter.write(String.format(format, custltv.getCustomerID(), custltv.getLtv()));
             }
             bufferWriter.close();
 
         } catch (FileNotFoundException ex) {
-            ex.printStackTrace();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        } catch (Exception ex) {
-            ex.printStackTrace();
+            System.out.println(ex.getMessage());
+        } catch (IOException | JsonSyntaxException ex) {
+           System.out.println(ex.getMessage());
         }
 
     }
