@@ -100,12 +100,12 @@ public class DataIngest {
 
         HashMap<String, ArrayList<SiteVisit>> custSiteVistMap = dataStore.getCustSiteVisitMap();
 
-        if (custSiteVistMap.get(key) != null) {
-            custSiteVistMap.get(key).add(new SiteVisit(key, customerID, tags, currEventTime));
+        if (custSiteVistMap.get(customerID) != null) {
+            custSiteVistMap.get(customerID).add(new SiteVisit(key, customerID, tags, currEventTime));
         } else {
             ArrayList<SiteVisit> listVisits = new ArrayList<>();
             listVisits.add(new SiteVisit(key, customerID, tags, currEventTime));
-            custSiteVistMap.put(key, listVisits);
+            custSiteVistMap.put(customerID, listVisits);
         }
     }
 
@@ -139,31 +139,42 @@ public class DataIngest {
         String eventTime = jsonObject.get("event_time").getAsString();
         String customerID = jsonObject.get("customer_id").getAsString();
         String amountWithCode = jsonObject.get("total_amount").getAsString();
-        BigDecimal amount = new BigDecimal(amountWithCode.split(" ")[0]);
+        double amount =   Double.parseDouble(amountWithCode.split(" ")[0]);
         
         
         LocalDateTime currEventTime = getDateTime(eventTime);
         dataStore.checkDataStoreIngestDates(currEventTime);
+        
         // To-do Currency
         
           System.out.println(key);
           HashMap<String, HashMap<String,Order>> custOrderMap = dataStore.getCustOrderMap();
-          HashMap<String,BigDecimal> totalOrderAmtMap = dataStore.getTotalOrderAmtMap();
+          HashMap<String,Double> totalOrderAmtMap = dataStore.getTotalOrderAmtMap();
           
         if (custOrderMap.get(customerID) != null) {
             Order order = custOrderMap.get(customerID).get(key);
+            
             if(order ==null)
             {
                 custOrderMap.get(customerID).put(key, new Order(key,customerID, amount, currEventTime));
                 //Track order amount per customer
-                totalOrderAmtMap.get(customerID).add(amount);
+//                if(totalOrderAmtMap.get(customerID)!=null)
+//                {
+//                    totalOrderAmtMap.get(customerID).add(amount);
+//                }
+//                else
+//                {
+//                    totalOrderAmtMap.put(customerID, amount);
+//                }
+                
                 
             }
             else if(currEventTime.isAfter(order.getEventTime()))
             {
                 custOrderMap.get(customerID).put(key,new Order(key,customerID, amount, currEventTime) );
                 
-                totalOrderAmtMap.get(customerID).add(amount.subtract(order.getTotalAmount()));
+             //   System.out.println(amount.subtract(order.getTotalAmount()));
+               // totalOrderAmtMap.get(customerID).add(amount.subtract(order.getTotalAmount()));
             }
             
             
@@ -171,7 +182,7 @@ public class DataIngest {
             HashMap<String,Order> orderMap = new HashMap<>();
             orderMap.put(key,new Order(key,customerID, amount, currEventTime) );
             custOrderMap.put(customerID,orderMap);
-            totalOrderAmtMap.put(customerID,amount);
+           // totalOrderAmtMap.put(customerID,amount);
         }
 
         
