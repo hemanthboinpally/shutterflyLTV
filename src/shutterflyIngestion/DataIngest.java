@@ -12,6 +12,8 @@ import shutterflyStorage.*;
 import java.time.*;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 /**
  *
@@ -78,22 +80,23 @@ public class DataIngest {
         String eventTime = jsonObject.get("event_time").getAsString();
         String customerID = jsonObject.get("customer_id").getAsString();
 
-        HashMap<String, String> tags = null;
+      //  HashMap<String, String> tags = null;
 
         //To-do tags
-//        JsonArray jsonArray = jsonObject.get("tags").getAsJsonArray();
-//
-//        HashMap<String, String> tags = new HashMap<>();
-//
-//        for (JsonElement document : jsonArray) {
-//            JsonObject tagsObject = document.getAsJsonObject();
-//            tagsObject.
-//            for(Iterator keyValue = tagsObject.keys(); itr.hasNext();) 
-//            {
-//                tagsObject.get(keyValue.next());
-//            }
-//
-//        }
+        JsonArray jsonArray = jsonObject.get("tags").getAsJsonArray();
+
+        HashMap<String, String> tags = new HashMap<>();
+
+        for (JsonElement document : jsonArray) {
+            JsonObject tagsObject = document.getAsJsonObject();
+            
+            ArrayList<String> keys = new ArrayList<>();
+            
+            tagsObject.entrySet().forEach((e) -> {
+                tags.put(e.getKey(), tagsObject.get(e.getKey()).getAsString());
+            });
+
+        }
         // Parse String to LocalDateTime using Instant
         LocalDateTime currEventTime = getDateTime(eventTime);
         dataStore.checkDataStoreIngestDates(currEventTime);
