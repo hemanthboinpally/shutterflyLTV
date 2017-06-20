@@ -5,7 +5,7 @@
  */
 package shutterflyStorage;
 
-import java.math.BigDecimal;
+
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -17,13 +17,13 @@ public class Order {
     
     private String orderID;
     private String customerID;
-    private BigDecimal totalAmount;
+    private double totalAmount;
     private LocalDateTime  lastUpdateEventTime;
 
     public Order() {
     }
 
-    public Order(String orderID, String customerID, BigDecimal totalAmount, LocalDateTime lastUpdateEventTime) {
+    public Order(String orderID, String customerID, double totalAmount, LocalDateTime lastUpdateEventTime) {
         this.orderID = orderID;
         this.customerID = customerID;
         this.totalAmount = totalAmount;
@@ -46,11 +46,11 @@ public class Order {
         this.customerID = customerID;
     }
 
-    public BigDecimal getTotalAmount() {
+    public double getTotalAmount() {
         return totalAmount;
     }
 
-    public void setTotalAmount(BigDecimal totalAmount) {
+    public void setTotalAmount(double totalAmount) {
         this.totalAmount = totalAmount;
     }
 
