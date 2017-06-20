@@ -5,7 +5,6 @@
  */
 package shutterflyStorage;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
@@ -25,7 +24,7 @@ public class DataStore {
     private HashMap<String,ArrayList<SiteVisit>> custSiteVisitMap;
     private HashMap<String,HashMap<String,Order>> custOrderMap;
     private HashMap<String,ArrayList<Image>> custImageMap;
-    private HashMap<String,BigDecimal> totalOrderAmtMap;
+    private HashMap<String,Double> totalOrderAmtMap;
     private LocalDateTime startIngestDateTime;
     private LocalDateTime endIngestDateTime;
     
@@ -59,7 +58,7 @@ public class DataStore {
         return custImageMap;
     }
 
-    public HashMap<String, BigDecimal> getTotalOrderAmtMap() {
+    public HashMap<String, Double> getTotalOrderAmtMap() {
         return totalOrderAmtMap;
     }
 
