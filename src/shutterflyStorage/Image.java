@@ -5,30 +5,43 @@
  */
 package shutterflyStorage;
 
-/**
- *
- * @author Hemanth Boinpally
- */
 import java.time.*;
 import java.util.Objects;
 
+/**
+ * This class holds the Image information
+ *
+ * @author Hemanth Boinpally
+ */
+
 public class Image {
-    
+
     private String imageID;
     private String customerID;
     private String cameraMake;
     private String cameraModel;
     private LocalDateTime lastUpdateEventTime;
 
+    /**
+     *
+     */
     public Image() {
         this.imageID = "imageID";
         this.customerID = "customerID";
         this.cameraMake = "cameraMake";
         this.cameraModel = "cameraModel";
-        this.lastUpdateEventTime = LocalDateTime.now(); 
+        this.lastUpdateEventTime = LocalDateTime.now();
     }
-    
-    
+
+    /**
+     * This is a parameterized constructor
+     *
+     * @param imageID
+     * @param customerID
+     * @param cameraMake
+     * @param cameraModel
+     * @param lastUpdateEventTime
+     */
     public Image(String imageID, String customerID, String cameraMake, String cameraModel, LocalDateTime lastUpdateEventTime) {
         this.imageID = imageID;
         this.customerID = customerID;
@@ -107,10 +120,4 @@ public class Image {
         return "Image{" + "imageID=" + imageID + ", customerID=" + customerID + ", cameraMake=" + cameraMake + ", cameraModel=" + cameraModel + ", lastUpdateEventTime=" + lastUpdateEventTime + '}';
     }
 
-   
-    
-    
-    
-    
-    
 }

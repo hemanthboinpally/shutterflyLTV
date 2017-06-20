@@ -21,9 +21,20 @@ public class Order {
 
     
     private String orderID;
+
+    /**
+     *
+     */
     public Order() {
     }
 
+    /**
+     *
+     * @param orderID
+     * @param customerID
+     * @param totalAmount
+     * @param lastUpdateEventTime
+     */
     public Order(String orderID, String customerID, double totalAmount, LocalDateTime lastUpdateEventTime) {
         this.orderID = orderID;
         this.customerID = customerID;
@@ -31,38 +42,74 @@ public class Order {
         this.lastUpdateEventTime = lastUpdateEventTime;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getOrderID() {
         return orderID;
     }
 
+    /**
+     *
+     * @param orderID
+     */
     public void setOrderID(String orderID) {
         this.orderID = orderID;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getCustomerID() {
         return customerID;
     }
 
+    /**
+     *
+     * @param customerID
+     */
     public void setCustomerID(String customerID) {
         this.customerID = customerID;
     }
 
+    /**
+     *
+     * @return
+     */
     public double getTotalAmount() {
         return totalAmount;
     }
 
+    /**
+     *
+     * @param totalAmount
+     */
     public void setTotalAmount(double totalAmount) {
         this.totalAmount = totalAmount;
     }
 
+    /**
+     *
+     * @return
+     */
     public LocalDateTime getEventTime() {
         return lastUpdateEventTime;
     }
 
+    /**
+     *
+     * @param lastUpdateEventTime
+     */
     public void setEventTime(LocalDateTime lastUpdateEventTime) {
         this.lastUpdateEventTime = lastUpdateEventTime;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int hashCode() {
         int hash = 7;
@@ -70,6 +117,11 @@ public class Order {
         return hash;
     }
 
+    /**
+     *
+     * @param obj
+     * @return
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -88,6 +140,10 @@ public class Order {
         return true;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String toString() {
         return "Order{" + "orderID=" + orderID + ", customerID=" + customerID + ", totalAmount=" + totalAmount + ", lastUpdateEventTime=" + lastUpdateEventTime + '}';

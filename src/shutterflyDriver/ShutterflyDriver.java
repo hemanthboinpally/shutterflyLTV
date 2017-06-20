@@ -22,15 +22,23 @@ import java.io.IOException;
 import java.util.Map;
 import shutterflySimpleLTV.*;
 
+/**
+ *
+ * @author Hemanth Boinpally
+ */
 public class ShutterflyDriver {
 
     /**
+     * This is method is used to read and write the events and LTV to file
+     *
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic heret
 
+        //handler to ingest data
         DataIngest dataIngest = new DataIngest();
+
+        //Storage for the data
         DataStore dataStore = new DataStore();
 
         String line = null;
@@ -47,25 +55,25 @@ public class ShutterflyDriver {
             }
 
             bufferedReader.close();
-            
+
             String events = sb.toString();
-            
+
             JsonArray jsonArray = (JsonArray) (new JsonParser().parse(events));
-            
+
             for (JsonElement document : jsonArray) {
                 dataIngest.ingest(document, dataStore);
             }
 
             // write the customerID and LTV in the file
             BufferedWriter bufferWriter = new BufferedWriter(new FileWriter("./output/output.txt"));
-            
+
             SimpleLTVCalculator ltvCalculate = new SimpleLTVCalculator();
             String format = "%-20s %-20s%n";
-            bufferWriter.write(String.format(format, "CustomerID","LTV"));
-            
+            bufferWriter.write(String.format(format, "CustomerID", "LTV"));
+
             for (LTVNode custltv : ltvCalculate.topXSimpleLTVCustomers(7, dataStore)) {
 
-                bufferWriter.write(String.format(format, custltv.getCustomerID(),custltv.getLtv()));
+                bufferWriter.write(String.format(format, custltv.getCustomerID(), custltv.getLtv()));
             }
             bufferWriter.close();
 

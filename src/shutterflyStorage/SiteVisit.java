@@ -14,17 +14,27 @@ import java.util.Objects;
  * @author Hemanth Boinpally
  */
 public class SiteVisit {
-    
+
     private String pageID;
     private String customerID;
-    private HashMap<String,String> tags;
+    private HashMap<String, String> tags;
     private LocalDateTime lastUpdateEventTime;
-   
 
+    /**
+     *
+     */
     public SiteVisit() {
-        
+
     }
 
+    /**
+     * This is a parameterized constructor
+     *
+     * @param pageID
+     * @param customerID
+     * @param tags
+     * @param lastUpdateEventTime
+     */
     public SiteVisit(String pageID, String customerID, HashMap<String, String> tags, LocalDateTime lastUpdateEventTime) {
         this.pageID = pageID;
         this.customerID = customerID;
@@ -93,10 +103,5 @@ public class SiteVisit {
     public String toString() {
         return "SiteVisit{" + "pageID=" + pageID + ", customerID=" + customerID + ", tags=" + tags + ", lastUpdateEventTime=" + lastUpdateEventTime + '}';
     }
-    
-    
-    
-    
-    
-}
 
+}

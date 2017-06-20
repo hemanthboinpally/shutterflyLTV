@@ -6,21 +6,26 @@
 package shutterflyIngestion;
 
 import com.google.gson.*;
-import java.math.BigDecimal;
 import java.util.HashMap;
 import shutterflyStorage.*;
 import java.time.*;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+
 
 /**
+ * This class is meant to handle the ingestion of the events into the DataStore
  *
  * @author Hemanth Boinpally
  */
 public class DataIngest {
 
+    /**
+     * This method ingest the event data into the DataStore by parsing the
+     * JSONElement
+     *
+     * @param document
+     * @param dataStore
+     */
     public void ingest(JsonElement document, DataStore dataStore) {
         JsonObject jsonObject = document.getAsJsonObject();
         String objectType = jsonObject.get("type").getAsString();
@@ -40,12 +45,18 @@ public class DataIngest {
                 break;
             default:
                 System.out.println("UnKnown data");
-                break;       
+                break;
         }
     }
 
+    /**
+     * This method will insert the customer information into the DataStore
+     *
+     * @param jsonObject
+     * @param dataStore
+     */
     public void insertCustomer(JsonObject jsonObject, DataStore dataStore) {
-        
+
         String verb = jsonObject.get("verb").getAsString();
         String key = jsonObject.get("key").getAsString();
         String eventTime = jsonObject.get("event_time").getAsString();
@@ -73,6 +84,12 @@ public class DataIngest {
         }
     }
 
+    /**
+     * This method will insert the site visits information into the DataStore
+     *
+     * @param jsonObject
+     * @param dataStore
+     */
     public void insertSiteVisit(JsonObject jsonObject, DataStore dataStore) {
 
         String verb = jsonObject.get("verb").getAsString();
@@ -80,23 +97,21 @@ public class DataIngest {
         String eventTime = jsonObject.get("event_time").getAsString();
         String customerID = jsonObject.get("customer_id").getAsString();
 
-      //  HashMap<String, String> tags = null;
-
-        //To-do tags
         JsonArray jsonArray = jsonObject.get("tags").getAsJsonArray();
 
         HashMap<String, String> tags = new HashMap<>();
 
         for (JsonElement document : jsonArray) {
             JsonObject tagsObject = document.getAsJsonObject();
-            
+
             ArrayList<String> keys = new ArrayList<>();
-            
+
             tagsObject.entrySet().forEach((e) -> {
                 tags.put(e.getKey(), tagsObject.get(e.getKey()).getAsString());
             });
 
         }
+
         // Parse String to LocalDateTime using Instant
         LocalDateTime currEventTime = getDateTime(eventTime);
         dataStore.checkDataStoreIngestDates(currEventTime);
@@ -112,8 +127,15 @@ public class DataIngest {
         }
     }
 
+    /**
+     *
+     * This method will insert the image information into the DataStore
+     *
+     * @param jsonObject
+     * @param dataStore
+     */
     public void insertImage(JsonObject jsonObject, DataStore dataStore) {
-        
+
         String verb = jsonObject.get("verb").getAsString();
         String key = jsonObject.get("key").getAsString();
         String eventTime = jsonObject.get("event_time").getAsString();
@@ -135,6 +157,12 @@ public class DataIngest {
 
     }
 
+    /**
+     * This method will insert the order information into the DataStore
+     *
+     * @param jsonObject
+     * @param dataStore
+     */
     public void insertOrder(JsonObject jsonObject, DataStore dataStore) {
 
         String verb = jsonObject.get("verb").getAsString();
@@ -142,65 +170,44 @@ public class DataIngest {
         String eventTime = jsonObject.get("event_time").getAsString();
         String customerID = jsonObject.get("customer_id").getAsString();
         String amountWithCode = jsonObject.get("total_amount").getAsString();
-        double amount =   Double.parseDouble(amountWithCode.split(" ")[0]);
-        
-        
+        double amount = Double.parseDouble(amountWithCode.split(" ")[0]);
+
         LocalDateTime currEventTime = getDateTime(eventTime);
         dataStore.checkDataStoreIngestDates(currEventTime);
-        
-        // To-do Currency
-        
-          //System.out.println(key);
-          HashMap<String, HashMap<String,Order>> custOrderMap = dataStore.getCustOrderMap();
-          HashMap<String,Double> totalOrderAmtMap = dataStore.getTotalOrderAmtMap();
-          
+
+        HashMap<String, HashMap<String, Order>> custOrderMap = dataStore.getCustOrderMap();
+        HashMap<String, Double> totalOrderAmtMap = dataStore.getTotalOrderAmtMap();
+
         if (custOrderMap.get(customerID) != null) {
             Order order = custOrderMap.get(customerID).get(key);
-            
-            if(order ==null)
-            {
-                custOrderMap.get(customerID).put(key, new Order(key,customerID, amount, currEventTime));
-                //Track order amount per customer
-//                if(totalOrderAmtMap.get(customerID)!=null)
-//                {
-//                    totalOrderAmtMap.get(customerID).add(amount);
-//                }
-//                else
-//                {
-//                    totalOrderAmtMap.put(customerID, amount);
-//                }
-                
-                
+
+            if (order == null) {
+                custOrderMap.get(customerID).put(key, new Order(key, customerID, amount, currEventTime));
+
+            } else if (currEventTime.isAfter(order.getEventTime())) {
+                custOrderMap.get(customerID).put(key, new Order(key, customerID, amount, currEventTime));
             }
-            else if(currEventTime.isAfter(order.getEventTime()))
-            {
-                custOrderMap.get(customerID).put(key,new Order(key,customerID, amount, currEventTime) );
-                
-             //   System.out.println(amount.subtract(order.getTotalAmount()));
-               // totalOrderAmtMap.get(customerID).add(amount.subtract(order.getTotalAmount()));
-            }
-            
-            
+
         } else {
-            HashMap<String,Order> orderMap = new HashMap<>();
-            orderMap.put(key,new Order(key,customerID, amount, currEventTime) );
-            custOrderMap.put(customerID,orderMap);
-           // totalOrderAmtMap.put(customerID,amount);
+            HashMap<String, Order> orderMap = new HashMap<>();
+            orderMap.put(key, new Order(key, customerID, amount, currEventTime));
+            custOrderMap.put(customerID, orderMap);
         }
 
-        
     }
-    
-    
-    public LocalDateTime getDateTime(String eventTime)
-    {
+
+    /**
+     * This method will parse String and convert it to LocalDateTime
+     *
+     * @param eventTime
+     * @return localDateTime
+     */
+    public LocalDateTime getDateTime(String eventTime) {
         Instant instant = Instant.parse(eventTime);
 
         LocalDateTime currEventTime = LocalDateTime.ofInstant(instant, ZoneId.of(ZoneOffset.UTC.getId()));
-        
+
         return currEventTime;
     }
-    
-   
 
 }

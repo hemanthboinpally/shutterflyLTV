@@ -9,12 +9,10 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
+ * Store the customer information
  *
  * @author Hemanth Boinpally
  */
-
-
-
 public class Customer {
 
     private String customerID;
@@ -23,7 +21,16 @@ public class Customer {
     private String state;
     private LocalDateTime lastUpdateEventTime;
 
-    public Customer(String customerID, String lastName, String city, String state,LocalDateTime lastUpdateEventTime) {
+    /**
+     * Parameterized Constructor
+     *
+     * @param customerID
+     * @param lastName
+     * @param city
+     * @param state
+     * @param lastUpdateEventTime
+     */
+    public Customer(String customerID, String lastName, String city, String state, LocalDateTime lastUpdateEventTime) {
         this.customerID = customerID;
         this.lastName = lastName;
         this.city = city;
@@ -31,26 +38,49 @@ public class Customer {
         this.lastUpdateEventTime = lastUpdateEventTime;
     }
 
+    /**
+     * No-arg constructor
+     */
     public Customer() {
-        
+
         this.customerID = "NoID";
         this.lastName = "NoName";
         this.city = "NoCity";
         this.state = "NoState";
     }
 
+    /**
+     * This method will return customerID
+     *
+     * @return customerID
+     */
     public String getCustomerID() {
         return customerID;
     }
 
+    /**
+     * This method will set customerID
+     *
+     * @param customerID
+     */
     public void setCustomerID(String customerID) {
         this.customerID = customerID;
     }
 
+    /**
+     * This method will return customer last Name
+     *
+     * @return LastName
+     */
     public String getLastName() {
         return lastName;
     }
 
+    /**
+     * This method will set customer last Name
+     *
+     * @param lastName
+     */
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
@@ -71,15 +101,25 @@ public class Customer {
         this.state = state;
     }
 
+    /**
+     * This method is used to get the latest date the customer information was
+     * altered
+     *
+     * @return localDateTime
+     */
     public LocalDateTime getLastUpdateEventTime() {
         return lastUpdateEventTime;
     }
 
+    /**
+     * This method is used to set the latest date the customer information was
+     * altered
+     *
+     * @param lastUpdateEventTime
+     */
     public void setLastUpdateEventTime(LocalDateTime lastUpdateEventTime) {
         this.lastUpdateEventTime = lastUpdateEventTime;
     }
-    
-    
 
     @Override
     public int hashCode() {
@@ -105,16 +145,10 @@ public class Customer {
         }
         return true;
     }
-    
-    
 
     @Override
     public String toString() {
         return "Customer{" + "customerID=" + customerID + ", lastName=" + lastName + ", city=" + city + ", state=" + state + ", lastUpdateEventTime=" + lastUpdateEventTime + '}';
     }
-
- 
-    
-    
 
 }
