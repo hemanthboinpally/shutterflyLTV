@@ -1,0 +1,6 @@
+CustomerID           LTV                 
+testValue4           808633.7999999998   
+testValue1           188510.40000000002  
+96f55c7d8f42         103490.40000000001  
+testValue3           18158.4             
+testValue2           9890.4              
